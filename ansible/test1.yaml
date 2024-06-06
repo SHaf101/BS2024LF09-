@@ -5,6 +5,33 @@
   connection: ssh
 
   tasks:
+    - name: Configure the login banner
+      cisco.ios.ios_banner:
+        banner: login
+        text: |
+          This
+          is Login
+          Banner 1
+        state: present
+      
+    - name: Configure the exec banner
+      cisco.ios.ios_banner:
+        banner: exec
+        text: |
+          This
+          is exec
+          Banner 2
+        state: present
+
+    - name: Configure the motd banner
+      cisco.ios.ios_banner:
+        banner: motd
+        text: |
+          This
+          is motd
+          Banner 3
+        state: present
+    
     - name: Configure Interface Meta
       cisco.ios.ios_interfaces:
         config:
@@ -15,7 +42,8 @@
             description: Connection to VLAN 20
             enabled: true
         state: merged
-    - name: Merge provided configuration with device configuration
+
+    - name: Configure Interface IPv6
       cisco.ios.ios_l3_interfaces:
         config:
           - name: GigabitEthernet0/1
@@ -25,3 +53,5 @@
             ipv6:
               - address: 2001:db8:2:4::/64
         state: merged
+
+    
