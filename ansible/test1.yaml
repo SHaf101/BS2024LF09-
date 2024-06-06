@@ -6,21 +6,14 @@
 
   tasks:
     - name: Configure IPv6 and VLANs on two interfaces
-      cisco.ios.ios_interface:
-        configs:
+      cisco.ios.ios_interfaces:
+        config:
           - name: GigabitEthernet0/1
             description: Connection to VLAN 10
-            mode: access
-            access_vlan: 10
-            ipv6:
-              address:
-                - 2001:db8:0:10::1/64
-            state: up
+            enabled: true
+            mode: layer3
           - name: GigabitEthernet0/2
             description: Connection to VLAN 20
-            mode: access
-            access_vlan: 20
-            ipv6:
-              address:
-                - 2001:db8:0:20::1/64
-            state: up
+            enabled: true
+            mode: layer3
+        state: merged
