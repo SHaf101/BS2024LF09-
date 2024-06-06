@@ -8,19 +8,19 @@
     - name: Configure the login banner
       cisco.ios.ios_banner:
         banner: login
-        text: This is login banner.
+        text: "This is login banner."
         state: present
       
     - name: Configure the exec banner
       cisco.ios.ios_banner:
         banner: exec
-        text: This is exec banner.
+        text: "This is exec banner."
         state: present
 
     - name: Configure the motd banner
       cisco.ios.ios_banner:
         banner: motd
-        text: This is motd banner.
+        text: "This is motd banner."
         state: present
     
     - name: Configure Interface Meta
