@@ -45,6 +45,23 @@
               - address: 2001:db8:2:4::/64
         state: merged
 
+    - name: Configure VLAN meta
+      cisco.ios.ios_vlans:
+        config:
+          - name: Vlan_10
+            vlan_id: 10
+            state: active
+            shutdown: disabled
+          - name: Vlan_20
+            vlan_id: 20
+            state: active
+            shutdown: enabled
+          - name: Vlan_40
+            vlan_id: 40
+            state: active
+            shutdown: enabled
+        state: merged
+
     - name: Configure Interface L2 VLAN
       cisco.ios.ios_l2_interfaces:
         config:
@@ -55,7 +72,7 @@
           - name: GigabitEthernet0/2
             mode: trunk
             trunk:
-              allowed_vlans: 10-20,40
+              allowed_vlans: 10,40
               native_vlan: 40
               #pruning_vlans: 10,20
               encapsulation: dot1q
