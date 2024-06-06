@@ -1,0 +1,87 @@
+---
+- name: Configure Cisco Router using cisco.ios collection
+  hosts: cisco_router
+  gather_facts: no
+  connection: network_cli
+
+  tasks:
+    - name: Configure IPv6 and VLANs on two interfaces
+      cisco.ios.ios_interface:
+        configs:
+          - name: GigabitEthernet0/1
+            description: Connection to VLAN 10
+            mode: access
+            access_vlan: 10
+            ipv6:
+              address:
+                - 2001:db8:0:10::1/64
+            state: up
+          - name: GigabitEthernet0/2
+            description: Connection to VLAN 20
+            mode: access
+            access_vlan: 20
+            ipv6:
+              address:
+                - 2001:db8:0:20::1/64
+            state: up
+
+    - name: Configure Management Interface with IPv4
+      cisco.ios.ios_interface:
+        configs:
+          - name: GigabitEthernet0/0
+            ipv4:
+              address: 192.168.1.1
+              mask: 255.255.255.0
+            state: up
+
+    - name: Configure ACL to allow HTTP/HTTPS on VLAN interfaces
+      cisco.ios.ios_acl:
+        config:
+          - name: WEB-TRAFFIC
+            type: extended
+            entries:
+              - rule: 10
+                action: permit
+                protocol: tcp
+                src_any: true
+                dst_any: true
+                dst_port:
+                  - eq: 80
+              - rule: 20
+                action: permit
+                protocol: tcp
+                src_any: true
+                dst_any: true
+                dst_port:
+                  - eq: 443
+
+    - name: Apply ACL to interfaces
+      cisco.ios.ios_interface:
+        configs:
+          - name: GigabitEthernet0/1
+            ipv4_acl_in: WEB-TRAFFIC
+          - name: GigabitEthernet0/2
+            ipv4_acl_in: WEB-TRAFFIC
+
+    - name: Configure banner
+      cisco.ios.ios_banner:
+        banners:
+          - banner: motd
+            text: |
+              Welcome to the Cisco Router!
+              Authorized access only!
+
+    - name: Configure SSH and set password
+      cisco.ios.ios_user:
+        users:
+          - name: admin
+            privilege: 15
+            secret: yourpassword
+
+    - name: Configure VTY lines for SSH
+      cisco.ios.ios_line:
+        lines:
+          - name: vty 0 4
+            transport:
+              input: ssh
+            login: local

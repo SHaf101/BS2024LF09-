@@ -1,0 +1,26 @@
+---
+- name: Configure Cisco Router using cisco.ios collection
+  hosts: cisco_router
+  gather_facts: no
+  connection: network_cli
+
+  tasks:
+    - name: Configure IPv6 and VLANs on two interfaces
+      cisco.ios.ios_interface:
+        configs:
+          - name: GigabitEthernet0/1
+            description: Connection to VLAN 10
+            mode: access
+            access_vlan: 10
+            ipv6:
+              address:
+                - 2001:db8:0:10::1/64
+            state: up
+          - name: GigabitEthernet0/2
+            description: Connection to VLAN 20
+            mode: access
+            access_vlan: 20
+            ipv6:
+              address:
+                - 2001:db8:0:20::1/64
+            state: up
