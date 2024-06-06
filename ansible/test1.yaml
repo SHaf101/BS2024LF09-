@@ -34,7 +34,7 @@
             enabled: true
         state: merged
 
-    - name: Configure Interface IPv6
+    - name: Configure Interface L3 IPv6
       cisco.ios.ios_l3_interfaces:
         config:
           - name: GigabitEthernet0/1
@@ -45,4 +45,18 @@
               - address: 2001:db8:2:4::/64
         state: merged
 
-    
+    - name: Configure Interface L2 VLAN
+      cisco.ios.ios_l2_interfaces:
+      config:
+        - name: GigabitEthernet0/1
+          mode: access
+          access:
+            vlan: 10
+        - name: GigabitEthernet0/2
+          mode: trunk
+          trunk:
+            allowed_vlans: 10-20,40
+            native_vlan: 40
+            #pruning_vlans: 10,20
+            encapsulation: dot1q
+      state: merged
