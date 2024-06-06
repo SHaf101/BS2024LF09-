@@ -5,7 +5,7 @@
   connection: ssh
 
   tasks:
-    - name: Configure IPv6 and VLANs on two interfaces
+    - name: Configure Interface Meta
       cisco.ios.ios_interfaces:
         config:
           - name: GigabitEthernet0/1
@@ -14,4 +14,18 @@
           - name: GigabitEthernet0/2
             description: Connection to VLAN 20
             enabled: true
+        state: merged
+    - name: Merge provided configuration with device configuration
+      cisco.ios.ios_l3_interfaces:
+        config:
+          - name: GigabitEthernet0/1
+            ipv4:
+              - enabled: false
+            ipv6:
+              - address: 2001:db8:0:3::/64
+          - name: GigabitEthernet0/2
+            ipv4:
+              - enabled: false
+            ipv6:
+              - address: 2001:db8:0:3::/64
         state: merged
