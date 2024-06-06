@@ -1,8 +1,8 @@
 ---
 - name: Configure Cisco Router using cisco.ios collection
   hosts: cisco_router
-  gather_facts: no
-  connection: network_cli
+  gather_facts: yes
+  connection: ssh
 
   tasks:
     - name: Configure IPv6 and VLANs on two interfaces
