@@ -11,9 +11,7 @@
           - name: GigabitEthernet0/1
             description: Connection to VLAN 10
             enabled: true
-            mode: layer3
           - name: GigabitEthernet0/2
             description: Connection to VLAN 20
             enabled: true
-            mode: layer3
         state: merged
